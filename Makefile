@@ -5,6 +5,3 @@ install:
 
 test:
 	pytest
-
-testing:
-	webmd && open test_out.html
