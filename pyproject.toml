@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "webmarkdown"
+version = "0.1.0"
+description = "Helps creating static websites from markdown"
+requires-python = ">=3.6"
+dependencies = [
+    "pyyaml",
+    "types-pyyaml",
+    "pytest"
+]
+
+[project.scripts]
+webmd = "webmarkdown.main:main"
+
+[tool.mypy]
+mypy_path = ["$VIRTUAL_ENV/lib/python3.x/site-packages"]
