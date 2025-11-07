@@ -17,16 +17,15 @@ class Checkpointer:
             return [x.strip() for x in f.readlines()]
 
     def mrproper(self):
-        for file in self.read():
+        lines = self.read()
+        files = [l.split(',')[1] for l in lines if l.split(',')[0]=='f']
+        directories = [l.split(',')[1] for l in lines if l.split(',')[0]=='d']
+        for file in files:
             if os.path.exists(file):
                 os.remove(file)
-        for file in self.read():
-            p = Path(file)
-            dirr = p.parent
-            if dirr == Path("."):
-                continue
-            if dirr.exists():
-                shutil.rmtree(dirr)
+        for directory in directories:
+            if os.path.exists(directory):
+                shutil.rmtree(directory)
         self.remove()
 
     def remove(self):
@@ -34,11 +33,16 @@ class Checkpointer:
             os.remove(".cache")
 
     def file_created(self, file):
-        self.created.append(file)
+        if ('f', file) not in self.created:
+            self.created.append(('f',file))
+
+    def folder_created(self, folder):
+        if ('d',folder) not in self.created:
+            self.created.append(('d',folder))
 
     def write(self):
         path = Path(".cache")
         path.touch(exist_ok=True)
-        with open('.cache', 'a') as f:
-            for file in self.created:
-                f.write(f"{file}\n")
+        with open('.cache', 'w') as f:
+            for (t,file) in self.created:
+                f.write(f"{t},{file}\n")

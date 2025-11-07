@@ -2,7 +2,7 @@ import yaml
 import argparse
 from .checkpointer import Checkpointer
 from .config_check import check_config
-from .worker import generate_html
+from .worker import generate_html, copy_assets
 from typing import Any
 
 def get_arguments():
@@ -27,6 +27,7 @@ def main():
             chk.mrproper()
         else:
             generate_html(conf)
+            copy_assets(conf)
             chk.write()
     except Exception as e:
         print(f"Error: {e}")
